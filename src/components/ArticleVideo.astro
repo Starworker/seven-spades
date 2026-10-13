@@ -1,0 +1,16 @@
+---
+import { youtubeEmbed } from '../lib/youtube';
+interface Props { link: string; title: string }
+const { link, title } = Astro.props;
+const embed = youtubeEmbed(link);
+---
+<section class="article-video" aria-label="视频教程">
+  {embed && <div class="video-player"><iframe data-verbatim src={embed} title={title} width="800" height="450" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>}
+  <a class="video-external" href={link} target="_blank" rel="noopener noreferrer">{embed ? '在 YouTube 打开 ↗' : '观看视频 ↗'}</a>
+</section>
+<style>
+  .article-video { margin: 0 0 28px; }
+  .video-player { aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; background: #090d15; border: 1px solid var(--line); }
+  iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .video-external { display: inline-block; margin-top: 10px; font-size: 12px; }
+</style>

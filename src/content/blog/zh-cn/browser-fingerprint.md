@@ -5,6 +5,7 @@ publishedAt: 2026-10-11
 category: browser-fingerprint
 tags: [Chrome, 隐私, 浏览器环境]
 featured: true
+video: "https://www.youtube.com/watch?v=KJybu1Y2tyY"
 ---
 
 浏览器指纹是由多项环境特征组成的观察结果，不是浏览器里的一个固定编号。这篇示例教程只读取本机信息，不修改配置。
