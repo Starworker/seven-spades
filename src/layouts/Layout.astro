@@ -1,23 +1,94 @@
+---
+import { site, url } from '../config';
+import { languages, languagePath, localizedUrl } from '../i18n/routes';
+import '../styles/global.css';
+import '../styles/theme.css';
+interface Props { title?: string; description?: string; image?: string; article?: boolean; noindex?: boolean; preserveMetadata?: boolean }
+const { title, description = site.description, image = url('images/share.png'), article = false, noindex = false, preserveMetadata = false } = Astro.props;
+const verbatimMetadata = article || preserveMetadata;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · 实用技术教程`;
+const canonical = new URL(noindex ? url('404.html') : Astro.url.pathname, Astro.site || Astro.url.origin);
+const shareImage = new URL(image, Astro.site || Astro.url.origin);
+const nav = [{ label: '首页', path: '' }, { label: '技术分类', path: 'categories/' }, { label: '标签', path: 'tags/' }, { label: '关于', path: 'about/' }, { label: '联系', path: 'contact/' }];
+const currentPage = languagePath(Astro.url.pathname).path;
+---
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <meta name="generator" content={Astro.generator} /><title data-verbatim={verbatimMetadata ? '' : undefined}>{pageTitle}</title>
+    <meta data-verbatim={verbatimMetadata ? '' : undefined} name="description" content={description} /><link rel="canonical" href={canonical} />
+    <meta data-verbatim={verbatimMetadata ? '' : undefined} property="og:title" content={pageTitle} /><meta data-verbatim={verbatimMetadata ? '' : undefined} property="og:description" content={description} />
+    <meta property="og:type" content={article ? 'article' : 'website'} /><meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} /><meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" /><meta data-verbatim={verbatimMetadata ? '' : undefined} name="twitter:title" content={pageTitle} /><meta data-verbatim={verbatimMetadata ? '' : undefined} name="twitter:description" content={description} /><meta name="twitter:image" content={shareImage} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} RSS`} href={url('rss.xml')} />
+    <meta name="theme-color" content="#f7f8fc" />
+    <script is:inline>
+      (() => {
+        const system = window.matchMedia('(prefers-color-scheme: dark)');
+        let preference = null;
+        try { preference = localStorage.getItem('seven-spades-theme'); } catch {}
+        const apply = () => {
+          const dark = preference === 'dark' || (preference !== 'light' && system.matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#101725' : '#f7f8fc');
+          const button = document.querySelector('[data-theme-toggle]');
+          if (button) {
+            const labels = document.documentElement.lang === 'en' ? ['Switch to dark mode', 'Switch to light mode'] : document.documentElement.lang === 'zh-TW' ? ['切換到暗黑模式', '切換到淺色模式'] : ['切换到暗黑模式', '切换到浅色模式'];
+            button.setAttribute('aria-pressed', String(dark));
+            button.setAttribute('aria-label', labels[Number(dark)]);
+            button.setAttribute('title', labels[Number(dark)]);
+          }
+        };
+        apply();
+        system.addEventListener('change', apply);
+        document.addEventListener('DOMContentLoaded', () => {
+          apply();
+          document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+            preference = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            try { localStorage.setItem('seven-spades-theme', preference); } catch {}
+            apply();
+          });
+        });
+        window.addEventListener('storage', event => {
+          if (event.key === 'seven-spades-theme' || event.key === null) { preference = event.newValue; apply(); }
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const menu = document.querySelector('[data-language-menu]');
+        document.querySelectorAll('[data-language-link]').forEach(link => {
+          link.addEventListener('click', () => {
+            const destination = new URL(link.href);
+            destination.hash = location.hash;
+            destination.search = location.search;
+            link.href = destination.href;
+          });
+        });
+        document.addEventListener('click', event => {
+          if (menu && !menu.contains(event.target)) menu.open = false;
+        });
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && menu?.open) {
+            menu.open = false;
+            menu.querySelector('summary').focus();
+          }
+        });
+      });
+    </script>
+    <a class="skip-link" href="#main">跳转到正文</a>
+    <header class="site-header"><div class="container header-inner">
+      <a class="brand" href={url()} aria-label={`${site.name}首页`}><span class="brand-mark">♠</span><span>{site.name}<small>{site.englishName}</small></span></a>
+      <nav aria-label="主导航">{nav.map(item => <a href={url(item.path)} aria-current={Astro.url.pathname === url(item.path) || (item.path && Astro.url.pathname.startsWith(url(item.path))) ? 'page' : undefined}>{item.label}</a>)}</nav>
+      <div class="header-actions"><a class="subscribe" href={url('rss.xml')}>RSS 订阅 <span aria-hidden="true">↗</span></a><button class="theme-toggle" data-theme-toggle type="button" aria-label="切换到暗黑模式" aria-pressed="false" title="切换到暗黑模式"><svg class="moon-icon" aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z" /></svg><svg class="sun-icon" aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg></button><details class="language-switch" data-language-menu><summary aria-label="选择语言"><svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span data-language-current>简体中文</span><svg class="language-chevron" aria-hidden="true" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m4 6 4 4 4-4"/></svg></summary><div class="language-panel">{languages.map(language => <a data-language-link={language.id} href={localizedUrl(currentPage, language.id)} lang={language.html} aria-current={language.id === 'zh-cn' ? 'true' : undefined}><span>{language.label}</span><svg class="language-check" aria-hidden="true" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 8 3 3 7-7"/></svg></a>)}</div></details></div>
+    </div></header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href={url()}>♠ {site.name}</a><p>记录实践，分享方法。让每一步都有答案。</p></div><div class="footer-links"><a href={url('about/')}>关于本站</a><a href={url('contact/')}>联系我</a><a href={url('rss.xml')}>RSS</a>{site.github && <a href={site.github}>GitHub ↗</a>}{site.videoChannel && <a href={site.videoChannel}>视频频道 ↗</a>}</div><small>© {new Date().getFullYear()} {site.name} · Built with Astro</small></div></footer>
+  </body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

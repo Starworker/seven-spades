@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CategoryGrid from '../../components/CategoryGrid.astro';
+import { getPosts } from '../../lib/posts';
+const posts = await getPosts(Astro.locals.language);
+---
+<Layout title="技术分类" description="按代理 IP、网络检测、浏览器指纹、跨境电商工具查找实用教程。"><div class="container"><header class="page-head"><span class="eyebrow">EXPLORE BY TOPIC</span><h1>技术分类<span class="heading-dot">.</span></h1><p>从你正在解决的问题出发，找到对应的方法与步骤。</p></header><section class="page-content" aria-label="全部分类"><CategoryGrid posts={posts} /></section></div></Layout>
+

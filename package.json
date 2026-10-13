@@ -6,12 +6,26 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --background",
+    "dev:stop": "astro dev stop",
+    "dev:status": "astro dev status",
+    "dev:logs": "astro dev logs",
+    "check": "astro check",
+    "test:content": "node scripts/test-content-languages.mjs",
+    "verify": "node scripts/verify-build.mjs && node scripts/check-translations.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.3.8"
+    "@astrojs/markdown-remark": "^7.3.2",
+    "astro": "^7.3.8",
+    "opencc-js": "^1.4.2",
+    "parse5": "^8.0.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.6.5",
+    "typescript": "^6.0.3"
   }
 }

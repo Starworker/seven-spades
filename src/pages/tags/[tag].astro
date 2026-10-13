@@ -1,0 +1,10 @@
+---
+import TagPage from '../../components/TagPage.astro';
+import { getPosts, getTags } from '../../lib/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return getTags(posts).map(tag => ({ params: { tag }, props: { tag, posts: posts.filter(p => p.data.tags.includes(tag)) } }));
+}
+const { tag, posts } = Astro.props;
+---
+<TagPage tag={tag} posts={posts} />

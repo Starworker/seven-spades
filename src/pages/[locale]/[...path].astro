@@ -1,0 +1,21 @@
+---
+import { pagePaths } from '../../i18n/routes';
+import { getPosts, postSlug } from '../../lib/posts';
+import { url } from '../../config';
+import ArticlePage from '../../components/ArticlePage.astro';
+import TagPage from '../../components/TagPage.astro';
+export async function getStaticPaths() {
+  const result = [];
+  for (const locale of ['en', 'zh-tw']) {
+    for (const path of await pagePaths(locale)) result.push({ params: { locale, path: path || undefined } });
+  }
+  return result;
+}
+const { path = '', locale } = Astro.params;
+const posts = await getPosts(locale);
+const post = path.startsWith('blog/') ? posts.find(p => postSlug(p) === path.slice(5)) : undefined;
+const tag = path.startsWith('tags/') ? decodeURIComponent(path.slice(5)) : undefined;
+if (!post && !tag) return Astro.rewrite(url(path ? `${path}/` : ''));
+---
+{post && <ArticlePage post={post} />}
+{tag && <TagPage tag={tag} posts={posts.filter(p => p.data.tags.includes(tag))} />}

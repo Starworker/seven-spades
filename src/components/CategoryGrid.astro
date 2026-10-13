@@ -1,0 +1,7 @@
+---
+import { categories, url } from '../config';
+import type { Post } from '../lib/posts';
+interface Props { posts: Post[] }
+const { posts } = Astro.props;
+---
+<div class="category-grid">{categories.map(category => <a class="category-card" href={url(`categories/${category.id}/`)}><span class:list={['category-icon', category.color]}>{category.icon}</span><span class="category-count">{posts.filter(p => p.data.category === category.id).length} 篇教程</span><h3>{category.name} <span aria-hidden="true">↗</span></h3><p>{category.description}</p></a>)}</div>

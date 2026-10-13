@@ -1,0 +1,6 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site, url } from '../config';
+const channels = [{ title: '邮件联系', description: '教程纠错、选题建议或合作交流。', href: site.email ? `mailto:${site.email}` : '', label: site.email }, { title: 'GitHub', description: '查看项目，或提交可复现的问题。', href: site.github, label: '前往 GitHub ↗' }, { title: '视频频道', description: '通过视频观看操作过程与工具演示。', href: site.videoChannel, label: '前往视频频道 ↗' }];
+---
+<Layout title="联系我" description="反馈教程问题、提出选题建议，与黑桃七交流。"><div class="container"><header class="page-head"><span class="eyebrow">LET'S TALK</span><h1>交流，让教程更好<span class="heading-dot">.</span></h1><p>发现了需要更新的步骤？有一个想弄明白的工具？欢迎告诉我。</p></header><section class="page-content"><div class="contact-grid">{channels.map(channel => <div class="contact-card"><h2>{channel.title}</h2><p>{channel.description}</p>{channel.href ? <a href={channel.href}>{channel.label}</a> : <span class="muted">联系方式待补充</span>}</div>)}</div><div class="info-panel prose" style="margin-top:30px"><h2>反馈时，带上这些信息</h2><ul><li>文章标题，以及出现问题的具体步骤。</li><li>操作系统、浏览器或工具版本。</li><li>实际结果与预期结果，必要时附脱敏截图。</li></ul><p>也可以先到<a href={url('categories/')}>技术分类</a>中看看是否已经有相关的排查教程。</p></div></section></div></Layout>

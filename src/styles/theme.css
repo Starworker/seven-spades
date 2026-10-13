@@ -1,0 +1,45 @@
+:root{color-scheme:light}
+.header-actions{display:flex;align-items:center;gap:12px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.language-switch{position:relative;flex-shrink:0}
+.language-switch summary{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink);font-size:12px;list-style:none;cursor:pointer;user-select:none}
+.language-switch summary::-webkit-details-marker{display:none}
+.language-switch summary:hover,.language-switch[open] summary{background:#eef2ff;border-color:#c7d4f7}
+.language-chevron{color:var(--muted);transition:transform .18s}
+.language-switch[open] .language-chevron{transform:rotate(180deg)}
+.language-panel{position:absolute;right:0;top:calc(100% + 10px);z-index:20;width:170px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 35px #17243b20}
+.language-panel a{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:7px;font-size:13px;line-height:1.4}
+.language-panel a:hover,.language-panel a:focus-visible{background:#f0f3fa;color:var(--blue)}
+.language-panel a[aria-current]{background:#eef2ff;color:var(--blue);font-weight:600}
+.language-check{visibility:hidden}.language-panel a[aria-current] .language-check{visibility:visible}
+[data-theme="dark"] .language-panel{background:#1c283c;box-shadow:0 12px 35px #0005}
+[data-theme="dark"] .language-panel a:hover,[data-theme="dark"] .language-panel a:focus-visible,[data-theme="dark"] .language-panel a[aria-current],[data-theme="dark"] .language-switch summary:hover,[data-theme="dark"] .language-switch[open] summary{background:#293b5c;border-color:#405681}
+@media(max-width:1150px){.header-actions .subscribe{display:none}.header-inner{gap:15px}}
+@media(max-width:700px){.header-inner{gap:8px}.header-actions{gap:8px}.language-switch summary{padding:0 9px;gap:6px;font-size:11px}.brand{font-size:17px;gap:7px}.brand-mark{width:32px;height:38px;font-size:25px}.brand small{font-size:8px}html[lang="en"] .brand{font-size:14px}html[lang="en"] .hero h1{font-size:36px}.hero-note{flex-wrap:wrap}html[lang="en"] .post-meta{flex-wrap:wrap}.category-card h3{overflow-wrap:anywhere}}
+.theme-toggle{width:40px;height:40px;display:grid;place-items:center;flex-shrink:0;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--ink);cursor:pointer}
+.theme-toggle:hover{background:#eef2ff;color:var(--blue)}
+.sun-icon{display:none}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#101725;--ink:#e4eaf5;--muted:#a2aec3;--blue:#91adff;--line:#2b374c}
+[data-theme="dark"] .moon-icon{display:none}
+[data-theme="dark"] .sun-icon{display:block}
+[data-theme="dark"] :is(.site-header,.site-footer,.post-card,.category-card,.tag,.info-panel,.contact-card,.article-body){background:#182233}
+[data-theme="dark"] .brand-mark{background:#31466d;color:#fff}
+[data-theme="dark"] .skip-link{background:#31466d}
+[data-theme="dark"] .button{background:#3e63df;color:white}
+[data-theme="dark"] .button:hover{background:#3152c5}
+[data-theme="dark"] .hero-visual{background:#1a2947;border-color:#324772}
+[data-theme="dark"] :is(.visual-top,.visual-bottom){color:#a2b4d8}
+[data-theme="dark"] .orbit{border-color:#405b8c}
+[data-theme="dark"] .tool-chip{background:#24334e;border-color:#3b4e6f}
+[data-theme="dark"] .hero-note span::before{color:#9cb3ef}
+[data-theme="dark"] .featured-section{background:#141e2f}
+[data-theme="dark"] .blue{--tone:#9db6ff;--tint:#22345a}
+[data-theme="dark"] .green{--tone:#7ed8b8;--tint:#1c3b35}
+[data-theme="dark"] .purple{--tone:#c4a5f9;--tint:#36294e}
+[data-theme="dark"] .orange{--tone:#f2bd83;--tint:#423222}
+[data-theme="dark"] .newsletter{background:#1b2a48;border-color:#324772}
+[data-theme="dark"] .prose blockquote{background:#22345a;color:#c4d3f5}
+[data-theme="dark"] .prose :not(pre)>code{background:#2b374c}
+[data-theme="dark"] .prose th{background:#22345a}
+[data-theme="dark"] .theme-toggle:hover{background:#22345a}
+@media(max-width:700px){.header-actions{order:1;margin-left:auto}.header-inner nav{order:2}[data-theme="dark"] .toc{background:#1b2a48}}

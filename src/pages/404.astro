@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { url } from '../config';
+---
+<Layout title="页面未找到" noindex><div class="container page-content"><header class="page-head"><span class="eyebrow">404 / NOT FOUND</span><h1>这条路径，暂时没有答案。</h1><p>页面可能已移动，或者链接地址有误。回到首页，继续找找你需要的教程。</p></header><a class="button" href={url()}>返回首页 →</a></div></Layout>

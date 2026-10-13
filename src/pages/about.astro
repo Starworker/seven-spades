@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategoryGrid from '../components/CategoryGrid.astro';
+import { getPosts } from '../lib/posts';
+import { site, url } from '../config';
+const posts = await getPosts(Astro.locals.language);
+---
+<Layout title="关于本站"><div class="container"><header class="page-head"><span class="eyebrow">BEHIND THE NOTES</span><h1>记录实践，分享方法<span class="heading-dot">.</span></h1><p>欢迎来到{site.name}。这里关注工具如何工作，也关注你如何真正用好它们。</p></header><section class="page-content"><div class="info-panel prose"><h2>为什么有这个网站</h2><p>技术资料很多，但把一个工具从“听说过”变成“会使用”，往往还差一些具体步骤。这个博客希望补上这段距离：说明准备条件，拆解操作过程，再给出可以检查的结果。</p><h2>你会在这里读到什么</h2><p>教程围绕代理 IP、网络检测、浏览器指纹和跨境电商工具展开，既介绍基础概念，也整理实际配置、排查方法与工作流程。</p><h2>关于作者</h2><p>我是{site.author}，这个博客的维护者。我习惯把工具的配置步骤与排查过程整理成文，方便再次查阅，也分享给遇到类似问题的读者。</p><h2>阅读建议</h2><p>先确认教程的适用环境，再按照步骤操作。工具版本与平台设置可能发生变化；如发现失效步骤，欢迎通过<a href={url('contact/')}>联系页面</a>反馈。</p></div><div class="section-heading" style="margin-top:40px"><h2>四个方向，一点点积累</h2></div><CategoryGrid posts={posts} /></section></div></Layout>
+

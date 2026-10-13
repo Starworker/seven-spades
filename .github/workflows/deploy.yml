@@ -1,0 +1,64 @@
+name: Deploy blog to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Determine Pages URL
+        env:
+          REPOSITORY: ${{ github.repository }}
+          OWNER: ${{ github.repository_owner }}
+          CUSTOM_SITE: ${{ vars.SITE_URL }}
+          CUSTOM_BASE: ${{ vars.BASE_PATH }}
+        shell: bash
+        run: |
+          repo="${REPOSITORY#*/}"
+          owner="${OWNER,,}"
+          site="https://${owner}.github.io"
+          base="/${repo}/"
+          if [[ "${repo,,}" == "${owner}.github.io" ]]; then base="/"; fi
+          if [[ -n "$CUSTOM_SITE" ]]; then site="$CUSTOM_SITE"; base="/"; fi
+          if [[ -n "$CUSTOM_BASE" ]]; then base="$CUSTOM_BASE"; fi
+          echo "SITE_URL=$site" >> "$GITHUB_ENV"
+          echo "BASE_PATH=$base" >> "$GITHUB_ENV"
+      - run: npm run check
+      - run: npm run build
+      - run: npm run verify
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: dist
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

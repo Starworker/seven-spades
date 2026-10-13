@@ -1,46 +1,38 @@
-# Astro Starter Kit: Basics
+# 黑桃七 · Seven Spades
+
+基于 Astro 7 的中文教程博客，使用 Markdown 管理内容，通过 GitHub Actions 部署到 GitHub Pages。
+
+已实现首页、教程文章、分类与标签、About / Contact、RSS、Sitemap 和 404。内置四篇可替换的示例教程，支持文章目录、代码复制、草稿与精选文章。
+
+支持暗黑模式与简体中文 / 繁體中文 / English。文章分别放在 `src/content/blog/zh-cn/`、`zh-tw/`、`en/`，同名文件对应不同语言版本。文章不自动翻译；公共界面使用语言字典。
+
+## 快速开始
+
+推荐 Node.js 24 LTS。
 
 ```sh
-npm create astro@latest -- --template basics
+npm ci
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+开发服务器在后台运行：`npm run dev:status`、`npm run dev:logs`、`npm run dev:stop`。
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```sh
+npm run check
+npm run build
+npm run verify
+npm run preview
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## 内容与配置
 
-## 🧞 Commands
+- 网站信息：`src/config.ts`
+- 文章：`src/content/blog/{zh-cn,zh-tw,en}/*.md`
+- 图片：`public/images/`
+- 部署：`.github/workflows/deploy.yml`
 
-All commands are run from the root of the project, from a terminal:
+## 使用文档
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+请阅读 [完整使用文档](docs/使用文档.md)，包含发布文章、分类标签、配图、联系方式、GitHub Pages、自定义域名及常见问题。
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+仓库 Settings → Pages 的 Source 选择 GitHub Actions，再推送到 main。默认自动推导项目站路径；实际发布前请补充联系方式并审阅示例文章。

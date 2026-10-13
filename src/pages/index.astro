@@ -1,11 +1,19 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import PostCard from '../components/PostCard.astro';
+import CategoryGrid from '../components/CategoryGrid.astro';
+import { getPosts } from '../lib/posts';
+import { url } from '../config';
+const posts = await getPosts(Astro.locals.language);
+const featured = posts.filter(p => p.data.featured).slice(0, 3);
 ---
 
 <Layout>
-	<Welcome />
+  <section class="hero container"><div class="hero-copy"><span class="eyebrow"><span class="status-dot"></span> 实践出发 · 持续更新</span><h1>复杂的工具，<br />简单<span class="accent">讲清楚。</span></h1><p>关于代理、网络与浏览器工具的实用教程。<br />从第一步配置，到最后一步验证，陪你把事情做成。</p><div class="hero-actions"><a class="button" href="#latest">开始阅读 →</a><a class="text-link" href={url('about/')}>了解这个博客 ↗</a></div><div class="hero-note"><span>步骤清晰</span><span>代码可复制</span><span>结果可验证</span></div></div>
+    <div class="hero-visual" aria-hidden="true"><div class="visual-top"><span>THE PRACTICAL TOOLKIT</span><span>♠ 07</span></div><div class="tool-orbit"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><div class="core">♠</div><span class="tool-chip chip-one">↗ 代理 IP</span><span class="tool-chip chip-two">⌁ 网络检测</span><span class="tool-chip chip-three">◎ 浏览器指纹</span><span class="tool-chip chip-four">▦ 电商工具</span></div><div class="visual-bottom"><span class="status-dot"></span> CONNECT IDEAS. BUILD BETTER.</div></div>
+  </section>
+  <section class="container section" id="latest"><div class="section-heading"><div><span class="eyebrow">LATEST NOTES</span><h2>最新文章<span class="heading-dot">.</span></h2></div><a class="text-link" href={url('categories/')}>按分类浏览 →</a></div><div class="post-grid">{posts.slice(0, 6).map(post => <PostCard post={post} />)}</div>{!posts.length && <p class="empty-state">第一篇教程正在准备中，欢迎稍后再来。</p>}</section>
+  {featured.length > 0 && <section class="featured-section"><div class="container section"><div class="section-heading"><div><span class="eyebrow">EDITOR'S PICKS</span><h2>值得先读的教程<span class="heading-dot">.</span></h2></div><span class="muted">从这里开始，少走一点弯路</span></div><div class="post-grid">{featured.map(post => <PostCard post={post} compact />)}</div></div></section>}
+  <section class="container section"><div class="section-heading"><div><span class="eyebrow">EXPLORE BY TOPIC</span><h2>找到你关心的方向<span class="heading-dot">.</span></h2></div><a class="text-link" href={url('tags/')}>浏览所有标签 →</a></div><CategoryGrid posts={posts} /></section>
+  <section class="container newsletter"><div><span class="eyebrow">KEEP LEARNING</span><h2>好教程，值得慢慢积累。</h2><p>通过 RSS 订阅，在你喜欢的阅读器里获取新文章。</p></div><a class="button" href={url('rss.xml')}>订阅更新 ↗</a></section>
 </Layout>

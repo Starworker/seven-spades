@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { categories, url } from '../../config';
+import { getPosts } from '../../lib/posts';
+export function getStaticPaths() { return categories.map(category => ({ params: { category: category.id }, props: { category } })); }
+const { category } = Astro.props;
+const posts = (await getPosts(Astro.locals.language)).filter(post => post.data.category === category.id);
+---
+<Layout title={category.name} description={category.description}><div class="container"><header class="page-head"><div class="breadcrumb"><a href={url()}>首页</a><span>/</span><a href={url('categories/')}>技术分类</a><span>/</span><span>{category.name}</span></div><span class="eyebrow">{posts.length} 篇教程</span><h1>{category.name}<span class="heading-dot">.</span></h1><p>{category.description}</p></header><section class="page-content"><div class="post-grid">{posts.map(post => <PostCard post={post} />)}</div>{!posts.length && <p class="empty-state">这个分类的教程正在准备中。<a href={url('categories/')}>浏览其他分类 →</a></p>}</section></div></Layout>

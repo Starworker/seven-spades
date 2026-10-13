@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostCard from './PostCard.astro';
+import { type Post } from '../lib/posts';
+import { url } from '../config';
+
+interface Props { tag: string; posts: Post[] }
+const { tag, posts } = Astro.props;
+const language = Astro.locals.language || 'zh-cn';
+const title = language === 'en' ? `Tag: ${tag}` : language === 'zh-tw' ? `標籤：${tag}` : `标签：${tag}`;
+const description = language === 'en' ? `Guides tagged ${tag}.` : language === 'zh-tw' ? `與 ${tag} 相關的教學。` : `与 ${tag} 相关的教程。`;
+---
+<Layout title={title} description={description} preserveMetadata><div class="container"><header class="page-head"><div class="breadcrumb"><a href={url('tags/')}>全部标签</a><span>/</span><span data-verbatim>{tag}</span></div><span class="eyebrow">{posts.length} 篇教程</span><h1 data-verbatim># {tag}<span class="heading-dot">.</span></h1></header><section class="page-content"><div class="post-grid">{posts.map(post => <PostCard post={post} />)}</div></section></div></Layout>
+
+

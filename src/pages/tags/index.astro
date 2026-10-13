@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getPosts, getTags } from '../../lib/posts';
+import { url } from '../../config';
+const posts = await getPosts(Astro.locals.language);
+const tags = getTags(posts);
+---
+<Layout title="全部标签" description="通过工具、协议和使用场景找到你需要的教程。"><div class="container"><header class="page-head"><span class="eyebrow">FIND YOUR INTEREST</span><h1>从一个关键词开始<span class="heading-dot">.</span></h1><p>工具、协议、使用场景——用标签把相关的知识串起来。</p></header><section class="page-content"><div class="tag-list">{tags.map(tag => <a class="tag" href={url(`tags/${encodeURIComponent(tag)}/`)}><span data-verbatim># {tag}</span><span>{posts.filter(p => p.data.tags.includes(tag)).length}</span></a>)}</div>{!tags.length && <p class="empty-state">发布带有标签的文章后，标签会出现在这里。</p>}</section></div></Layout>
+
+
